@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crescendo</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #333;
+    }
+    .header {
+      text-align: left;
+      padding: 2rem;
+      font-size: 4rem; /* Increased font size */
+      font-family: 'Georgia', serif;
+      color: #8B865C; /* Changed color to light brown */
+      background: none; /* Removed gradient and shadow effects */
+      font-weight: bold;
+    }
+    .intro {
+      text-align: left;
+      padding: 0 2rem;
+      margin-bottom: 2rem;
+      color: #6b4226;
+      font-size: 1.2rem;
+      line-height: 1.6;
+    }
+    .content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 2rem;
+      gap: 3rem;
+    }
+    .text-content {
+      flex: 1;
+    }
+    .text-content .description {
+      margin-bottom: 2.5rem;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #5a3d2b;
+    }
+    .text-content .cards {
+      display: flex;
+      gap: 2rem;
+      justify-content: space-around;
+    }
+    .text-content .card {
+      flex: 1;
+      background-color: #A9CFCB; /* Orange color */
+      border: 1px solid #c5b2a0;
+      border-radius: 30px;
+      padding: 2rem;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-align: center;
+    }
+    .text-content .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+    .text-content .card h2 {
+      margin: 0 0 0.5rem 0;
+      color: #6b4226;
+      font-family: 'Georgia', serif;
+    }
+    .text-content .card p {
+      margin: 0;
+      color: #5a4a3a;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+    .button {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #c5a383;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 20px;
+      transition: background-color 0.3s;
+      font-weight: bold;
+    }
+    .button:hover {
+      background-color: #a68663;
+    }
+    .illustration {
+      flex: 1;
+      text-align: center;
+    }
+    .illustration img {
+      max-width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .about-us {
+      padding: 2rem;
+      background-color: #f4ebe3;
+      margin-top: 3rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+    .about-us h2 {
+      font-family: 'Georgia', serif;
+      color: #6b4226;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .about-us p {
+      font-size: 1.1rem;
+      color: #5a3d2b;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    Crescendo
+  </header>
+  <section class="intro">
+    
+  </section>
+  <section class="content">
+    <div class="text-content">
+      <div class="description">
+        Welcome to Crescendo! We help you find the perfect playlist for any occasion. Whether you're looking to create a custom playlist or find the ideal tracks to match your mood, Crescendo has got you covered. Dive into the world of personalized music experiences.At Crescendo, we believe music should adapt to you. Our platform allows you to create playlists tailored to your taste or discover curated selections that reflect your current mood. From energizing anthems to soothing melodies, Crescendo offers a seamless way to match your music to your life. Explore the endless possibilities of music personalization with Crescendo, your ultimate companion in creating the perfect soundtrack for your moments.
+      </div>
+      <div class="cards">
+        <div class="card">
+          <h2>Create Playlist</h2>
+          <p>Create a personalized playlist based on your favorite genres, artists, and preferences.</p>
+          <a href="{{ url_for('chatbot1') }}"class="button">Create playlist</a>
+        </div>
+        <div class="card">
+          <h2>Mood Playlist</h2>
+          <p>Let us suggest the perfect playlist for your mood and provide therapy! Relax, energize, or focus with us!</p>
+          <a href="{{ url_for('chatbot2') }}" class="button">Explore mood music</a>
+        </div>
+      </div>
+    </div>
+    <div class="illustration">
+      <img src="{{ url_for('static', filename='2359.jpg') }}" alt="Playlist Illustration">
+    </div>
+  </section>
+  <section class="about-us">
+    <h2>About Us</h2>
+    <p>
+      At Crescendo, we are passionate about music and its power to enhance every moment. Our team is dedicated to providing a platform that helps you discover and create music that speaks to you. Whether you're crafting the perfect playlist for a party or finding the right tracks for relaxation, we aim to make your music journey effortless and personal. Join us in exploring new sounds and experiences, and let Crescendo be the soundtrack to your life.
+    </p>
+  </section>
+</body>
+</html>
