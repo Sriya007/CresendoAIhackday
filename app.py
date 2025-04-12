@@ -10,18 +10,19 @@ import nltk
 nltk.download('punkt')
 nltk.download('wordnet')
 
-# Load environment variables
-dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+# Load environment variables from load.env (or rename to .env if preferred)
+dotenv_path = os.path.join(os.path.dirname(__file__), 'load.env')
 load_dotenv(dotenv_path=dotenv_path)
 
-# Explicitly pass the API key for testing
-GEMINI_API_KEY = "AIzaSyCaUIMJ54yhOWnz_i8XcxCOX47ZvzQZhBw"  # Replace this with your actual key
+# Get the Google API key (the key is now stored with the name GOOGLE_API_KEY in the file)
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+print("🔐 Loaded Google API Key:", GOOGLE_API_KEY)
+genai.configure(api_key=GOOGLE_API_KEY)
 
 # Flask app initialization
 app = Flask(__name__)
 
 # Chatbot 1 Functions
-# Load dataset for Chatbot 1
 def load_dataset_chatbot1(path):
     try:
         df = pd.read_excel(path)
@@ -40,17 +41,17 @@ def load_dataset_chatbot1(path):
     except Exception as e:
         raise RuntimeError(f"Error loading the file: {e}")
 
-# Configure Generative AI for Chatbot 1
 def configure_api_chatbot1():
     try:
-        genai.configure(api_key=GEMINI_API_KEY)  # Use the API key directly here
+        genai.configure(api_key=GOOGLE_API_KEY)  # Use the API key directly here
     except Exception as e:
         raise RuntimeError(f"Error configuring Generative AI API: {e}")
 
-# Chatbot 1 Response Generation
+
 def chatbot_response_chatbot1(user_input):
     try:
-        model = genai.GenerativeModel('gemini-pro')
+        # Use the updated valid model identifier
+        model = genai.GenerativeModel('models/gemini-1.5-pro-002')
         prompt = (
             f"You are a highly knowledgeable and adaptive chatbot specializing in music recommendations. "
             f"Provide accurate and verified song recommendations based on user preferences. If specific details like "
@@ -63,20 +64,17 @@ def chatbot_response_chatbot1(user_input):
     except Exception as e:
         return f"I'm sorry, I encountered an error while processing your input: {str(e)}"
 
-# Music Recommendation for Chatbot 1
 def recommend_music_chatbot1(df, user_query):
     try:
         choices = df['Searchable'].tolist()
         matches = process.extract(user_query, choices, limit=5)
         top_matches = [match for match in matches if match[1] > 60]  # Filter based on confidence score
-
         recommendations = df.iloc[[choices.index(match[0]) for match in top_matches]][['Name', 'Artist']]
         return recommendations.to_dict('records')
     except Exception as e:
         return []
 
 # Chatbot 2 Functions
-# Load dataset for Chatbot 2
 def load_dataset_chatbot2(path):
     try:
         df = pd.read_excel(path)
@@ -95,17 +93,16 @@ def load_dataset_chatbot2(path):
     except Exception as e:
         raise RuntimeError(f"Error loading the file: {e}")
 
-# Configure Generative AI for Chatbot 2
 def configure_api_chatbot2():
     try:
-        genai.configure(api_key=GEMINI_API_KEY)  # Use the API key directly here
+        genai.configure(api_key=GOOGLE_API_KEY)  # Use the API key directly here
     except Exception as e:
         raise RuntimeError(f"Error configuring Gemini API: {e}")
 
-# Chatbot 2 Response Generation
 def chatbot_response_chatbot2(user_input, mood_context=None):
     try:
-        model = genai.GenerativeModel('gemini-pro')
+        # Updated the model identifier to match Chatbot 1
+        model = genai.GenerativeModel('models/gemini-1.5-pro-002')
         prompt = (
             f"You are a dynamic, empathetic, and creative chatbot who provides emotional support "
             f"and personalized music recommendations. Respond uniquely to user inputs, and adapt "
@@ -116,12 +113,10 @@ def chatbot_response_chatbot2(user_input, mood_context=None):
     except Exception as e:
         return f"An error occurred: {str(e)}"
 
-# Music Recommendation for Chatbot 2
 def recommend_music_chatbot2(df, user_query):
     try:
         from sklearn.feature_extraction.text import TfidfVectorizer
         from sklearn.metrics.pairwise import cosine_similarity
-
         vectorizer = TfidfVectorizer()
         tfidf_matrix = vectorizer.fit_transform(df['Searchable'])
         query_vec = vectorizer.transform([user_query])
@@ -147,8 +142,7 @@ def chatbot2_page():
 
 @app.route('/chatbot1', methods=['POST'])
 def chatbot1():
-    dataset_path = r"C:\Users\Admin\crescendo\music2.xlsx"
-
+    dataset_path = r"C:/Users/Hp/OneDrive/Desktop/Crescendo/music1.xlsx"
     try:
         df = load_dataset_chatbot1(dataset_path)
         configure_api_chatbot1()
@@ -168,8 +162,7 @@ def chatbot1():
 
 @app.route('/chatbot2', methods=['POST'])
 def chatbot2():
-    dataset_path = r"C:\Users\Admin\crescendo\music2.xlsx"
-
+    dataset_path = r"C:/Users/Hp/OneDrive/Desktop/Crescendo/music1.xlsx"
     try:
         df = load_dataset_chatbot2(dataset_path)
         configure_api_chatbot2()
@@ -178,17 +171,13 @@ def chatbot2():
 
     user_query = request.json.get("message", "")
     mood_context = request.json.get("mood", "")
-
     if not user_query:
         return jsonify({"error": "No query provided."}), 400
-
     if not mood_context:
         mood_context = "neutral"  # If no mood context is provided, use a default value
 
     ai_response = chatbot_response_chatbot2(user_query, mood_context)
-
     return jsonify({"response": ai_response})
-
 
 if __name__ == "__main__":
     app.run(debug=True)
