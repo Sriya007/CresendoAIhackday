@@ -1,0 +1,10 @@
+pandas
+google-generativeai
+scikit-learn
+fuzzywuzzy
+nltk
+Flask
+openpyxl
+python -m venv env
+pip install python-Levenshtein
+pip install pandas google-generativeai scikit-learn fuzzywuzzy nltk
